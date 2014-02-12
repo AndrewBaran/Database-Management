@@ -13,7 +13,8 @@ where aid in(select aid
              where cid in(select cid
                           from customers
                           where name = 'Basics')
-            );
+            )
+order by city asc;
 
 
 -- 2. Get the pids of products ordered through any agent who makes at least one order for a customer in Kyoto
@@ -33,19 +34,22 @@ select cid, name
 from customers
 where cid in(select cid
              from orders
-             where aid != 'a03');
+                except
+            select cid
+            from orders
+            where aid = 'a03');
 
 
 -- 4. Get the cids and names of customers who ordered both product p01 and p07
 select cid, name
 from customers
 where cid in(select cid
-	     from orders
-	     where pid = 'p01'
-		intersect
-	     select cid
-	     from orders
-	     where pid = 'p07');
+       from orders
+       where pid = 'p01'
+    intersect
+       select cid
+       from orders
+       where pid = 'p07');
 
 
 -- 5. Get the pids of products ordered by any customers who ever placed an order through agent a03
@@ -65,8 +69,8 @@ where cid in(select cid
              where aid in(select aid
                           from agents
                           where city = 'Dallas'
-                or city = 'Duluth')
-        )
+                              or city = 'Duluth')
+            )
 order by name asc;
 
 
@@ -76,4 +80,4 @@ from customers
 where discount in(select discount
                   from customers
                   where city = 'Dallas'
-            or city = 'Kyoto');
+                      or city = 'Kyoto');
