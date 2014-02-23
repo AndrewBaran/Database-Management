@@ -12,6 +12,10 @@
 
 
 -- 3. List the products whose priceUSD is above the average priceUSD
+select *
+from products
+where priceusd > (select avg(priceusd)
+                  from products);
 
 
 -- 4. Show the customer name, pid ordered, and the dollars for all customer orders, sorted by dollars from high to low
