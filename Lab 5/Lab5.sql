@@ -15,15 +15,6 @@ where customers.cid = orders.cid
 
 -- 2. Get the pids of products ordered through any agent who makes at least one order for a customer in Kyoto. 
 --		Use joins this time; no subqueries
-select distinct pid
-from customers
-    join
-orders
-on customers.cid = orders.cid
-    join
-agents
-on agents.aid = orders.aid
-    and customers.city = 'Kyoto'
 
 
 -- 3. Get the names of customers who have never placed an order. Use a subquery
@@ -59,14 +50,13 @@ where customers.city = agents.city;
 
 
 -- 7. Get the name and city of customers who live in the city where the least number of products are made
-
-
--- Dallas: 455,900
--- Newark: 504,100
--- Duluth: 275,900
--- Total: 1,235,900
-
--- Answer:
-
--- Tiptop   |   Duluth
--- ACME     |   Duluth
+select customers.name, customers.city
+from customers
+where city in(select city
+              from(select city, sum(quantity)
+                   from products
+                   group by city
+                   order by sum(quantity) asc
+                   limit 1
+                   ) lowestCity
+             );
