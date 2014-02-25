@@ -69,3 +69,7 @@ where customers.cid = orders.cid
 
 
 -- 7. Write a query to check the accuracy of the dollars column in the Orders table. This means calculating Orders.dollars from other data in other tables and then comparing those values to the values in Orders.dollars
+select orders.dollars, ((1.0 - (customers.discount / 100.0)) * (qty * priceusd)) as calculatedDollars
+from customers, orders, products
+where customers.cid = orders.cid
+    and products.pid = orders.pid;
