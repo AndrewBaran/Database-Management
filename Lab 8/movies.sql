@@ -6,7 +6,6 @@
 -- Lab 8: Normalization Two
 
 
-
 -- Drop tables if they already exist in the DBMS
 drop table if exists actorsInMovies;
 drop table if exists directorsInMovies;
@@ -95,16 +94,22 @@ create table director
 create table actorsInMovies
 (
     mid     char(3) not null references movies(mid),
+    pid     char(3) references actor(pid),
 
-    pid     char(3) references actor(pid)
+    salary  integer,
+
+    primary key(mid, pid)
 );
 
 
 create table directorsInMovies
 (
     mid     char(3) not null references movies(mid),
+    pid     char(3) references director(pid),
 
-    pid     char(3) references director(pid)
+    salary  integer,
+
+    primary key(mid, pid)
 );
 
 
@@ -172,56 +177,69 @@ insert into movies(mid, name, yearReleased, domesticSales, foreignSales, mediaSa
 
 
 -- Actors In Movies
-insert into actorsInMovies(mid, pid)
-    values('m01', 'p01');
-insert into actorsInMovies(mid, pid)
-    values('m01', 'p03');
+insert into actorsInMovies(mid, pid, salary)
+    values('m01', 'p01', 1);
+insert into actorsInMovies(mid, pid, salary)
+    values('m01', 'p03', 2);
 
-insert into actorsInMovies(mid, pid)
-    values('m02', 'p01');
-insert into actorsInMovies(mid, pid)
-    values('m02', 'p02');
-insert into actorsInMovies(mid, pid)
-    values('m02', 'p03');
+insert into actorsInMovies(mid, pid, salary)
+    values('m02', 'p01', 3);
+insert into actorsInMovies(mid, pid, salary)
+    values('m02', 'p02', 4);
+insert into actorsInMovies(mid, pid, salary)
+    values('m02', 'p03', 5);
 
-insert into actorsInMovies(mid, pid)
-    values('m03', 'p02');
+insert into actorsInMovies(mid, pid, salary)
+    values('m03', 'p02', 6);
 
-insert into actorsInMovies(mid, pid)
-    values('m04', 'p01');
-insert into actorsInMovies(mid, pid)
-    values('m04', 'p02');
+insert into actorsInMovies(mid, pid, salary)
+    values('m04', 'p01', 7);
+insert into actorsInMovies(mid, pid, salary)
+    values('m04', 'p02', 8);
 
-insert into actorsInMovies(mid, pid)
-    values('m05', 'p02');
-insert into actorsInMovies(mid, pid)
-    values('m05', 'p03');
+insert into actorsInMovies(mid, pid, salary)
+    values('m05', 'p02', 9);
+insert into actorsInMovies(mid, pid, salary)
+    values('m05', 'p03', 10);
 
-insert into actorsInMovies(mid, pid)
-    values('m06', 'p01');
+insert into actorsInMovies(mid, pid, salary)
+    values('m06', 'p01', 11);
 
 
 -- Directors In Movies
-insert into directorsInMovies(mid, pid)
-    values('m01', 'p04');
+insert into directorsInMovies(mid, pid, salary)
+    values('m01', 'p04', 12);
 
-insert into directorsInMovies(mid, pid)
-    values('m02', 'p06');
+insert into directorsInMovies(mid, pid, salary)
+    values('m02', 'p06', 13);
 
-insert into directorsInMovies(mid, pid)
-    values('m03', 'p04');
-insert into directorsInMovies(mid, pid)
-    values('m03', 'p05');
+insert into directorsInMovies(mid, pid, salary)
+    values('m03', 'p04', 14);
+insert into directorsInMovies(mid, pid, salary)
+    values('m03', 'p05', 15);
 
-insert into directorsInMovies(mid, pid)
-    values('m04', 'p05');
+insert into directorsInMovies(mid, pid, salary)
+    values('m04', 'p05', 16);
 
-insert into directorsInMovies(mid, pid)
-    values('m05', 'p04');
+insert into directorsInMovies(mid, pid, salary)
+    values('m05', 'p04', 17);
 
-insert into directorsInMovies(mid, pid)
-    values('m06', 'p04');
-insert into directorsInMovies(mid, pid)
-    values('m06', 'p05');
-insert into directorsInMovies(mid, pid)
-    values('m06', 'p06');
+insert into directorsInMovies(mid, pid, salary)
+    values('m06', 'p04', 18);
+insert into directorsInMovies(mid, pid, salary)
+    values('m06', 'p05', 19);
+insert into directorsInMovies(mid, pid, salary)
+    values('m06', 'p06', 20);
+
+
+-- 5. Write a SQL query to return all the directors with whom actor "Sean Connery" has worked.
+select *
+from person
+where pid in (select pid 
+              from directorsInMovies
+              where mid in (select mid
+                            from actorsInMovies
+                            where pid in (select pid
+                                          from person
+                                          where firstName = 'Sean'
+                                            and lastName = 'Connery')));
