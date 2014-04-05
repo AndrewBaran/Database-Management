@@ -107,7 +107,7 @@ create table spacecraft
 -- Systems
 create table systems
 (
-	sysID	char(4) not null,
+	sysID	char(6) not null,
 
 	name 	text,
 	description		text,
@@ -119,7 +119,7 @@ create table systems
 -- Parts
 create table parts
 (
-	partID	char(4) not null,
+	partID	char(7) not null,
 
 	name 	text,
 	description		text,
@@ -131,7 +131,7 @@ create table parts
 -- Suppliers
 create table suppliers
 (
-	suppID	char(4) not null,
+	suppID	char(7) not null,
 
 	name 	text,
 	address		text,
@@ -156,7 +156,7 @@ create table crew
 create table systemsInSpacecrafts
 (
 	sid 	char(4) not null references spacecraft(sid),
-	sysID	char(4) not null references systems(sysID),
+	sysID	char(6) not null references systems(sysID),
 
 	primary key(sid, sysID)
 );
@@ -165,8 +165,8 @@ create table systemsInSpacecrafts
 -- Parts In Systems
 create table partsInSystems
 (
-	sysID	char(4) not null references systems(sysID),
-	partID	char(4) not null references parts(partID),
+	sysID	char(6) not null references systems(sysID),
+	partID	char(7) not null references parts(partID),
 
 	primary key(sysID, partID)
 );
@@ -175,11 +175,94 @@ create table partsInSystems
 -- Catalog of suppliers and their parts
 create table catalog
 (
-	suppID	char(4) not null references suppliers(suppID),
-	partID	char(4) not null references parts(partID),
+	suppID	char(7) not null references suppliers(suppID),
+	partID	char(7) not null references parts(partID),
 
 	primary key(suppID, partID)
 );
 
 
--- Insert statements
+
+-- Insert statements for testing
+
+-- People
+insert into person(pid, firstName, lastName, age)
+	values('p001', 'Alpha', 'A', 10);
+insert into person(pid, firstName, lastName, age)
+	values('p002', 'Beta', 'B', 20);
+insert into person(pid, firstName, lastName, age)
+	values('p003', 'Charlie', 'C', 30);
+
+
+-- Engineers
+insert into engineers(pid, highestDegree, favVideoGame)
+	values('p001', 'Bachelor', 'Portal');
+
+
+-- Astronauts
+insert into astronauts(pid, yearsFlying, golfHandicap)
+	values('p002', 20, 35);
+
+
+-- Flight Control Ops
+insert into flightControlOps(pid, chairPref, prefDrink)
+	values('p003', 7, 'Vodka');
+
+
+-- Job Types
+insert into jobType(jid, name, description)
+	values('j001', 'Engineer', 'Builds stuff');
+insert into jobType(jid, name, description)
+	values('j002', 'Astronaut', 'Goes into space');
+insert into jobType(jid, name, description)
+	values('j003', 'Flight Control Operator', 'The Houston that people talk to');
+
+
+-- Spacecraft
+insert into spacecraft(sid, name, tailNumber, weightInTons, fuelType, crewCapacity)
+	values('s001', 'Apollo 7', 007, 2000, 'Magic', 20);
+
+
+-- Systems
+insert into systems(sysID, name, description)
+	values('sys001', 'Life Support', 'Keeps you alive');
+insert into systems(sysID, name, description)
+	values('sys002', 'Temperature Control', 'Keeps you warm');
+
+
+-- Parts
+insert into parts(partID, name, description)
+	values('part001', 'Screw', 'You');
+insert into parts(partID, name, description)
+	values('part002', 'Hammer', 'Waiting for it to fall');
+
+
+-- Suppliers
+insert into suppliers(suppID, name, address, paymentTerms)
+	values('supp001', 'Acme', '123 Fake St', 'Monthly bill');
+
+
+-- Crew
+insert into crew(pid, jid, sid)
+	values('p002', 'j002', 's001');
+
+
+-- Systems In Spaceships
+insert into systemsInSpacecrafts(sid, sysID)
+	values('s001', 'sys001');
+insert into systemsInSpacecrafts(sid, sysID)
+	values('s001', 'sys002');
+
+
+-- Parts In Systems
+insert into partsInSystems(sysID, partID)
+	values('sys001', 'part001');
+insert into partsInSystems(sysID, partID)
+	values('sys002', 'part002');
+
+
+-- Catalog of suppliers and their parts
+insert into catalog(suppID, partID)
+	values('supp001', 'part001');
+insert into catalog(suppID, partID)
+	values('supp001', 'part002');
