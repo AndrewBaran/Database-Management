@@ -31,7 +31,7 @@ drop table if exists suppliers;
 -- Person
 create table person
 (
-	pid		char(4),
+	pid		char(4) not null,
 
 	firstName	text,
 	lastName	text,
@@ -44,7 +44,7 @@ create table person
 -- Engineers
 create table engineers
 (
-	pid		char(4) references person(pid),
+	pid		char(4) not null references person(pid),
 
 	highestDegree	text,
 	favVideoGame	text,
@@ -56,20 +56,19 @@ create table engineers
 -- Astronauts
 create table astronauts
 (
-	pid		char(4) references person(pid),
+	pid		char(4) not null references person(pid),
 
 	yearsFlying		integer,
 	golfHandicap	integer,
 
 	primary key(pid)
-
 );
 
 
 -- Flight Control Operators
 create table flightControlOps
 (
-	pid		char(4) references person(pid),
+	pid		char(4) not null references person(pid),
 
 	chairPref	integer,
 	prefDrink	text,
@@ -78,9 +77,10 @@ create table flightControlOps
 );
 
 
+-- Job Types
 create table jobType
 (
-	jid		char(4),
+	jid		char(4) not null,
 
 	name 	text,
 	description		text,
@@ -89,9 +89,10 @@ create table jobType
 );
 
 
+-- Spacecraft
 create table spacecraft
 (
-	sid		char(4),
+	sid		char(4) not null,
 
 	name 	text,
 	tailNumber	integer,
@@ -101,3 +102,84 @@ create table spacecraft
 
 	primary key(sid)	
 );
+
+
+-- Systems
+create table systems
+(
+	sysID	char(4) not null,
+
+	name 	text,
+	description		text,
+
+	primary key(sysID)
+);
+
+
+-- Parts
+create table parts
+(
+	partID	char(4) not null,
+
+	name 	text,
+	description		text,
+
+	primary key(partID)
+);
+
+
+-- Suppliers
+create table suppliers
+(
+	suppID	char(4) not null,
+
+	name 	text,
+	address		text,
+	paymentTerms	text,
+
+	primary key(suppID)
+);
+
+
+-- Crew
+create table crew
+(
+	pid		char(4) not null references person(pid),
+	jid		char(4) not null references jobType(jid),
+	sid		char(4) not null references spacecraft(sid),
+
+	primary key(pid, jid, sid)
+);
+
+
+-- Systems In Spacecrafts
+create table systemsInSpacecrafts
+(
+	sid 	char(4) not null references spacecraft(sid),
+	sysID	char(4) not null references systems(sysID),
+
+	primary key(sid, sysID)
+);
+
+
+-- Parts In Systems
+create table partsInSystems
+(
+	sysID	char(4) not null references systems(sysID),
+	partID	char(4) not null references parts(partID),
+
+	primary key(sysID, partID)
+);
+
+
+-- Catalog of suppliers and their parts
+create table catalog
+(
+	suppID	char(4) not null references suppliers(suppID),
+	partID	char(4) not null references parts(partID),
+
+	primary key(suppID, partID)
+);
+
+
+-- Insert statements
