@@ -20,7 +20,7 @@ begin
                   from courses
                   where courses.num in (select prereqnum
                                         from prerequisites
-                                        where prerequisites.coursenum = courseNum));
+                                        where prerequisites.coursenum = courseNumber));
 
 end;
 $$
@@ -30,14 +30,13 @@ language PLPGSQL;
 
 
 -- function IsPreReqFor(courseNum) - Returns the courses for which the passed-in course number is an immediate pre-requisite
-create function IsPreReqFor(IN courseNumber integer) returns integer as
+create function IsPreReqFor(IN courseNumber integer) returns setof integer as
 $$
-
-declare PreReqList integer;
-
 begin
 
-    return 10;
+    return query (select prerequisites.courseNum
+                  from prerequisites
+                  where prerequisites.preReqNum = courseNumber);
 
 end;
 $$
