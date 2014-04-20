@@ -1,0 +1,53 @@
+Theme: Music Festival
+
+
+Tables:
+
+
+People (Weak) (1-to-1 between People and Zip)
+- pid, firstName, lastName, address, zip
+- PK: pid
+- FK: zip
+
+
+Zip (Strong)
+- zip, city, state
+- PK: zip
+
+
+BandMember (1-to-1 between People and BandMember)
+- pid, instrument, yearsPlayed
+- PK: pid
+- FK: pid
+
+
+Bands (Strong)
+- bandID, name, genre, yearFormed
+- PK: bandID
+
+
+MembersInBands (Weak) (Associative table between Bands and BandMember)
+- pid, bandID, yearsInBand
+- PK: pid + bandID
+- FK: pid + bandID
+
+
+Stages (Strong)
+- stageName, audienceSize
+- PK: stageName
+
+
+BandsOnStage (Weak) (Associative table between Bands and Stages)
+- stageName, bandID, startTime
+- PK: stageName + bandID
+- FK: stageName + bandID
+
+
+JobRole (Strong)
+- jobID, name, description
+- PK: jobID
+
+
+Shift (Strong):
+- shiftID, slotNumber, startTime, endTime
+- PK: shiftID
