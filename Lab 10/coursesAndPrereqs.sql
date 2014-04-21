@@ -62,3 +62,24 @@ values (220, 120);
 select *
 from Prerequisites
 order by courseNum DESC;
+
+
+--
+-- An example stored procedure ("function")
+--
+create or replace function get_courses_by_credits(int, REFCURSOR) returns refcursor as 
+$$
+declare
+   num_credits int       := $1;
+   resultset   REFCURSOR := $2;
+begin
+   open resultset for 
+      select num, name, credits
+      from   courses
+       where  credits >= num_credits;
+   return resultset;
+end;
+$$ 
+language plpgsql;
+
+select get_courses_by_credits(0, 'results');
