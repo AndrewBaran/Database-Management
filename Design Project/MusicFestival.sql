@@ -431,3 +431,52 @@ insert into staff(pid, jobID, shiftNum, dayWorking)
 	values('p000005', 'j003', '1', '2012-01-01');
 insert into staff(pid, jobID, shiftNum, dayWorking)
 	values('p000005', 'j003', '1', '2012-01-02');
+
+
+
+-- Triggers
+
+-- Prevent an attendee from being under 18 years old
+-- Prevent chaning of salary to negative
+
+-- Security
+
+-- Attendees
+drop role if exists attendee;
+create role attendee;
+
+grant select on bands to attendee;
+grant select on stages to attendee;
+grant select on schedule to attendee;
+
+
+-- Ticket Office
+drop role if exists ticketOffice;
+create role ticketOffice;
+
+grant select on tickets to ticketOffice;
+grant select, insert, update, delete on ticketsSold to ticketOffice;
+grant select, insert, update, delete on attendee to ticketOffice;
+
+
+-- Management
+drop role if exists management;
+create role management;
+
+grant select, insert, update, delete on jobRole to management;
+grant select, insert, update, delete on staff to management;
+grant select, insert, update, delete on schedule to management;
+grant select, insert, update, delete on eventWorker to management;
+grant select, insert, update, delete on bands to management;
+grant select, insert, update, delete on membersInBands to management;
+grant select, insert, update, delete on tickets to management;
+grant select, insert, update, delete on stages to management;
+grant select, insert, update, delete on person to management;
+
+
+-- Database administrator
+drop role if exists databaseManager;
+create role databaseManager;
+
+grant all privileges on all tables in schema public to databaseManager;
+
