@@ -16,6 +16,14 @@ shiftNum -> startTime
 shiftNumb -> endTime
 
 
+Tickets:
+
+ticketID -> ticketName
+ticketID -> timeLength
+ticketID -> seatArea
+ticketID -> priceUSD
+
+
 Person:
 
 pid -> firstName
@@ -26,12 +34,12 @@ pid -> zip
 
 EventWorker:
 
-pid -> salary
+pid -> salaryUSD
 
 
 Attendee:
 
-pid -> seatStatus
+pid -> age
 
 
 Staff:
@@ -41,7 +49,7 @@ pid, jobID, shiftNum, dayWorking ->
 
 TicketsSold:
 
-pid, stageID ->
+pid, ticketID ->
 
 
 Stages:

@@ -49,7 +49,7 @@ create table jobRole
 	jobID	char(4) not null,
 
 	name	text,
-	description		text,
+	description	text,
 
 	primary key(jobID)
 );
@@ -137,7 +137,7 @@ create table eventWorker
 (
 	pid		char(7) not null references person(pid),
 
-	salary	real,
+	salaryUSD	real,
 
 	primary key(pid)
 );
@@ -303,15 +303,15 @@ insert into person(pid, firstName, lastName, address, zip)
 
 
 -- Event Worker
-insert into eventWorker(pid, salary)
+insert into eventWorker(pid, salaryUSD)
 	values('p000001', '2000');
-insert into eventWorker(pid, salary)
+insert into eventWorker(pid, salaryUSD)
 	values('p000002', '3000');
-insert into eventWorker(pid, salary)
+insert into eventWorker(pid, salaryUSD)
 	values('p000003', '4000');
-insert into eventWorker(pid, salary)
+insert into eventWorker(pid, salaryUSD)
 	values('p000004', '5000');
-insert into eventWorker(pid, salary)
+insert into eventWorker(pid, salaryUSD)
 	values('p000005', '6000');
 
 
@@ -405,7 +405,7 @@ insert into schedule(stageID, bandID, datePlayed, startTime, endTime)
 insert into schedule(stageID, bandID, datePlayed, startTime, endTime)
 	values('s002', 'b0001', '2012-01-02', '15:00:00', '17:00:00');
 insert into schedule(stageID, bandID, datePlayed, startTime, endTime)
-	values('s001', 'b0002', '2012-01-01', '19:00:00', '21:00:00');
+	values('s001', 'b0002', '2012-01-01', '14:00:00', '16:00:00');
 insert into schedule(stageID, bandID, datePlayed, startTime, endTime)
 	values('s003', 'b0002', '2012-01-03', '10:00:00', '12:00:00');
 insert into schedule(stageID, bandID, datePlayed, startTime, endTime)
