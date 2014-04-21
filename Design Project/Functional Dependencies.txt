@@ -36,7 +36,7 @@ pid -> seatStatus
 
 Staff:
 
-pid, jobID, shiftNum -> 
+pid, jobID, shiftNum, dayWorking -> 
 
 
 TicketsSold:
