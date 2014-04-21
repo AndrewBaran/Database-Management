@@ -1,0 +1,13 @@
+Executive Summary:
+
+
+Overview:
+
+Ozzapalooza is one of the premiere music festivals in the United States. Located in and around the area of Phoenix, Arizona, this three-day long festival of music, energy, and fun brings in tens of thousands of individuals from all over the country. Many genres of music are heard, from classic rock to death metal, and many classic bands, like Rush and Slayer, perform each year to their fans. To aid and help this music festival flourish, our consulting company has offered our services in enhancing the technological backend that runs the festival. By increasing the access and management of the large amounts of data that the festival produces, we can help the staff and organizers of the festival by making the entire system easier and friendlier to work with.
+
+
+Objectives:
+
+Our consulting company has been hired by the organiziers of the Ozzapalooza to create an appropriate database system for them to keep better track of the information regarding their employees, bands, and the attendees of the festival. Our goal was to create this system so that it would be very easy to modify the information necessary to the festival, such as the scheduling of when bands are on stage to the accuracy of each band and their members. As well as creating the necessary structure for the database, we have also provided the organizers of the festival with a variety of triggers, to ensure accurate and consistent information, and functions, so that they can properly manage their employees and bands.
+
+The outline of our proposed Database system is within this document. Each page contains a seperate part of the database system, known as an entity, as well as that entities functional dependencies, views, stored procedures, triggers, and access rights. This database system was designed for PostgreSQL 9.3.2, and it has been tested thoroughly.
