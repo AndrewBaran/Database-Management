@@ -26,6 +26,7 @@ drop table if exists jobRole;
 drop table if exists shift;
 drop table if exists bands;
 drop table if exists stages;
+drop table if exists tickets;
 
 
 -- Create table statements
@@ -91,6 +92,20 @@ create table stages
 );
 
 
+-- Tickets
+create table tickets
+(
+	ticketID	char(4) not null,
+
+	ticketName	text,
+	timeLength	integer,
+	seatArea	text,
+	priceUSD	real,
+
+	primary key(ticketID)
+);
+
+
 -- Person
 create table person
 (
@@ -133,8 +148,7 @@ create table attendee
 (
 	pid		char(7) not null references person(pid),
 
-	seatStatus	text
-		check (seatStatus = 'Grass' or seatStatus = 'Pit' or seatStatus = 'VIP'),
+	age		integer,
 
 	primary key(pid)
 );
@@ -156,9 +170,9 @@ create table staff
 create table ticketsSold
 (
 	pid			char(7) not null references attendee(pid),
-	stageID		char(4) not null references stages(stageID),
+	ticketID	char(4) not null references tickets(ticketID),
 
-	primary key(pid, stageID)
+	primary key(pid, ticketID)
 );
 
 
@@ -230,6 +244,22 @@ insert into shift(shiftNum, startTime, endTime)
 	values('3', '19:00:00', '00:00:00');
 
 
+-- Tickets
+insert into tickets(ticketID, ticketName, timeLength, seatArea, priceUSD)
+	values('t001', 'One Day Grass', 1, 'Grass', 10);
+insert into tickets(ticketID, ticketName, timeLength, seatArea, priceUSD)
+	values('t002', 'Three Day Grass', 3, 'Grass', 25);
+insert into tickets(ticketID, ticketName, timeLength, seatArea, priceUSD)
+	values('t003', 'One Day Pit', 1, 'Pit', 30);
+insert into tickets(ticketID, ticketName, timeLength, seatArea, priceUSD)
+	values('t004', 'Three Day Pit', 3, 'Pit', 80);
+insert into tickets(ticketID, ticketName, timeLength, seatArea, priceUSD)
+	values('t005', 'One Day VIP', 1, 'VIP', 100);
+insert into tickets(ticketID, ticketName, timeLength, seatArea, priceUSD)
+	values('t006', 'Three Day VIP', 3, 'VIP', 250);
+
+
+
 -- Person
 insert into person(pid, firstName, lastName, address, zip)
 	values('p000001', 'Andrew', 'Apple', '123 Fake St', '06614');
@@ -286,16 +316,16 @@ insert into eventWorker(pid, salary)
 
 
 -- Attendee
-insert into attendee(pid, seatStatus)
-	values('p000006', 'Grass');
-insert into attendee(pid, seatStatus)
-	values('p000007', 'Pit');
-insert into attendee(pid, seatStatus)
-	values('p000008', 'Grass');
-insert into attendee(pid, seatStatus)
-	values('p000009', 'Pit');
-insert into attendee(pid, seatStatus)
-	values('p000010', 'VIP');
+insert into attendee(pid, age)
+	values('p000006', 18);
+insert into attendee(pid, age)
+	values('p000007', 25);
+insert into attendee(pid, age)
+	values('p000008', 32);
+insert into attendee(pid, age)
+	values('p000009', 44);
+insert into attendee(pid, age)
+	values('p000010', 59);
 
 
 -- Band Members
@@ -338,16 +368,16 @@ insert into stages(stageID, name, audienceSize)
 
 
 -- Tickets Sold
-insert into ticketsSold(pid, stageID)
-	values('p000006', 's001');
-insert into ticketsSold(pid, stageID)
-	values('p000007', 's001');
-insert into ticketsSold(pid, stageID)
-	values('p000008', 's002');
-insert into ticketsSold(pid, stageID)
-	values('p000009', 's003');
-insert into ticketsSold(pid, stageID)
-	values('p000010', 's004');
+insert into ticketsSold(pid, ticketID)
+	values('p000006', 't001');
+insert into ticketsSold(pid, ticketID)
+	values('p000007', 't001');
+insert into ticketsSold(pid, ticketID)
+	values('p000008', 't002');
+insert into ticketsSold(pid, ticketID)
+	values('p000009', 't003');
+insert into ticketsSold(pid, ticketID)
+	values('p000010', 't004');
 
 
 -- Members In Bands
@@ -401,4 +431,3 @@ insert into staff(pid, jobID, shiftNum, dayWorking)
 	values('p000005', 'j003', '1', '2012-01-01');
 insert into staff(pid, jobID, shiftNum, dayWorking)
 	values('p000005', 'j003', '1', '2012-01-02');
-
