@@ -10,14 +10,14 @@
 -- Drop tables if they already exist in the DBMS
 
 -- Weak entities
-drop table if exists person;
-drop table if exists bandMember;
-drop table if exists eventWorker;
-drop table if exists attendee;
 drop table if exists staff;
 drop table if exists membersInBands;
 drop table if exists bandsOnStage;
 drop table if exists ticketsSold;
+drop table if exists bandMember;
+drop table if exists eventWorker;
+drop table if exists attendee;
+drop table if exists person;
 
 
 -- Strong entities
@@ -30,6 +30,7 @@ drop table if exists stages;
 
 -- Create table statements
 
+-- ZipCode
 create table zipCode
 (
 	zip 	integer not null,
@@ -41,6 +42,7 @@ create table zipCode
 );
 
 
+-- JobRole
 create table jobRole
 (
 	jobID	char(4) not null,
@@ -52,6 +54,7 @@ create table jobRole
 );
 
 
+-- Shift
 create table shift
 (
 	shiftNum	integer not null,
@@ -62,6 +65,7 @@ create table shift
 );
 
 
+-- Bands
 create table bands
 (
 	bandID	char(5) not null,
@@ -74,6 +78,7 @@ create table bands
 );
 
 
+-- Stages
 create table stages
 (
 	stageID		char(4) not null,
@@ -85,6 +90,7 @@ create table stages
 );
 
 
+-- Person
 create table person
 (
 	pid		char(7) not null,
@@ -93,21 +99,24 @@ create table person
 	lastName	text,
 	address		text,
 
-	zip 	integer references zipCode(zip)
-);
-
-
-create table bandMember
-(
-	pid		char(7) not null references person(pid),
-
-	instrument		text,
-	-- Do I need yearsPlayed field?
+	zip 	integer references zipCode(zip),
 
 	primary key(pid)
 );
 
 
+-- BandMember
+create table bandMember
+(
+	pid		char(7) not null references person(pid),
+
+	instrument		text,
+
+	primary key(pid)
+);
+
+
+-- EventWorker
 create table eventWorker
 (
 	pid		char(7) not null references person(pid),
@@ -118,6 +127,7 @@ create table eventWorker
 );
 
 
+-- Attendee
 create table attendee
 (
 	pid		char(7) not null references person(pid),
@@ -126,4 +136,50 @@ create table attendee
 		check (seatStatus = 'Grass' or seatStatus = 'Pit' or seatStatus = 'VIP'),
 
 	primary key(pid)
+);
+
+
+-- Staff
+create table staff
+(
+	pid			char(7) not null references eventWorker(pid),
+	jobID		char(4) not null references jobRole(jobID),
+	shiftNum	integer not null references shift(shiftNum),
+
+	primary key(pid, jobID, shiftNum)
+);
+
+
+-- TicketsSold
+create table ticketsSold
+(
+	pid			char(7) not null references attendee(pid),
+	stageID		char(4) not null references stages(stageID),
+
+	primary key(pid, stageID)
+);
+
+
+-- MembersInBands
+create table membersInBands
+(
+	pid		char(7) not null references bandMember(pid),
+	bandID	char(5) not null references bands(bandID),
+
+	yearsInBand		integer,
+
+	primary key(pid, bandID)
+);
+
+
+-- BandsOnStage
+create table bandsOnStage
+(
+	stageID		char(4) not null references stages(stageID),
+	bandID		char(5) not null references bands(bandID),
+	datePlayed	date not null,
+	startTime	time,
+	endTime		time,
+
+	primary key(stageID, bandID, datePlayed)
 );
