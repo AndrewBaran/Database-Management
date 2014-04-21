@@ -6,6 +6,10 @@
 -- Design Project: Music Festival
 
 
+-- Drop views if they already exist in the DBMS
+drop view if exists bandInformation;
+drop view if exists salesNumbers;
+drop view if exists completeSchedule;
 
 -- Drop tables if they already exist in the DBMS
 
@@ -434,12 +438,47 @@ insert into staff(pid, jobID, shiftNum, dayWorking)
 
 
 
+-- Views
+
+-- View that allows a person to see each band member, their associated band, instrument played, and years played.
+create view bandInformation as
+
+    select person.firstName, person.lastName, bands.name as bandName, bandMember.instrument, membersInBands.yearsInBand
+    from bands, bandMember, membersInBands, person
+    where bands.bandID = membersInBands.bandID
+        and bandMember.pid = membersInBands.pid
+        and person.pid = bandMember.pid;
+
+
+-- View that allows management to see the sales numbers in terms of tickets sold, which tickets were sold, and the profit from that sales.
+create view salesNumbers as
+
+    select tickets.ticketName, priceUSD, count as salesNumbers, (tickets.priceUSD * count) as profitUSD
+    from tickets
+        join
+    (select ticketsSold.ticketID, count(ticketsSold.ticketID)
+    from ticketsSold
+    group by ticketsSold.ticketID) ticketSales
+    on tickets.ticketID = ticketSales.ticketID
+    order by profitUSD desc;
+
+
+-- View that gives a complete, accurate, and minimal necessary schedule of all the bands
+create view completeSchedule as 
+
+    select stages.name as stageName, bands.name as bandName, schedule.datePlayed, schedule.startTime, schedule.endTime 
+    from schedule, bands, stages
+    where schedule.bandID = bands.bandID
+        and schedule.stageID = stages.stageID;
+
+
 -- Triggers
 
 -- Prevent an attendee from being under 18 years old
 -- Prevent chaning of salary to negative
 
--- Security
+
+-- Security permissions
 
 -- Attendees
 drop role if exists attendee;
@@ -479,4 +518,3 @@ drop role if exists databaseManager;
 create role databaseManager;
 
 grant all privileges on all tables in schema public to databaseManager;
-
