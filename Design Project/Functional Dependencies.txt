@@ -1,0 +1,73 @@
+ZipCode:
+
+zip -> city
+zip -> state
+
+
+JobRole:
+
+jobID -> name
+jobID -> description
+
+
+Shift:
+
+shiftNum -> startTime
+shiftNumb -> endTime
+
+
+Person:
+
+pid -> firstName
+pid -> lastName
+pid -> address
+pid -> zip
+
+
+EventWorker:
+
+pid -> salary
+
+
+Attendee:
+
+pid -> seatStatus
+
+
+Staff:
+
+pid, jobID, shiftNum -> 
+
+
+TicketsSold:
+
+pid, stageID ->
+
+
+Stages:
+
+stageID -> name
+stageID -> audienceSize
+
+
+BandMember:
+
+pid -> instrument
+
+
+MembersInBands:
+
+pid, bandID -> yearsInBand
+
+
+Bands:
+
+bandID -> name
+bandID -> genre
+bandID -> yearFormed
+
+
+BandsOnStage:
+
+stageID, bandID, datePlayed -> startTime
+stageID, bandID, datePlayed -> endTime
