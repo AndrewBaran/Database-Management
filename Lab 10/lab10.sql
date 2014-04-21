@@ -6,13 +6,8 @@
 -- Lab 10
 
 
--- Drop functions if they already exist in the DBMS
-drop function if exists PreReqsFor(integer);
-drop function if exists IsPreReqFor(integer);
-
-
 -- function PreReqsFor(courseNum) - Returns the immediate prerequisites for the passed-in course number
-create function PreReqsFor(IN courseNumber integer) returns setof integer as
+create or replace function PreReqsFor(IN courseNumber integer) returns setof integer as
 $$
 begin
 
@@ -30,7 +25,7 @@ language PLPGSQL;
 
 
 -- function IsPreReqFor(courseNum) - Returns the courses for which the passed-in course number is an immediate pre-requisite
-create function IsPreReqFor(IN courseNumber integer) returns setof integer as
+create or replace function IsPreReqFor(IN courseNumber integer) returns setof integer as
 $$
 begin
 
