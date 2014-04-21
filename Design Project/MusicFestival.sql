@@ -12,7 +12,7 @@
 -- Weak entities
 drop table if exists staff;
 drop table if exists membersInBands;
-drop table if exists bandsOnStage;
+drop table if exists schedule;
 drop table if exists ticketsSold;
 drop table if exists bandMember;
 drop table if exists eventWorker;
@@ -172,8 +172,8 @@ create table membersInBands
 );
 
 
--- BandsOnStage
-create table bandsOnStage
+-- Schedule
+create table schedule
 (
 	stageID		char(4) not null references stages(stageID),
 	bandID		char(5) not null references bands(bandID),
