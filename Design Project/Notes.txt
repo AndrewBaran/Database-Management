@@ -4,7 +4,7 @@ Theme: Music Festival
 Tables:
 
 
-People (Weak) (1-to-1 between People and Zip)
+Person (Weak) (1-to-1 between Person and Zip)
 - pid, firstName, lastName, address, zip
 - PK: pid
 - FK: zip
@@ -15,7 +15,7 @@ Zip (Strong)
 - PK: zip
 
 
-BandMember (1-to-1 between People and BandMember)
+BandMember (Weak) (1-to-1 between Person and BandMember)
 - pid, instrument, yearsPlayed
 - PK: pid
 - FK: pid
@@ -26,21 +26,21 @@ Bands (Strong)
 - PK: bandID
 
 
-MembersInBands (Weak) (Associative table between Bands and BandMember)
+MembersInBands (Weak) (Associative entity between Bands and BandMember)
 - pid, bandID, yearsInBand
 - PK: pid + bandID
 - FK: pid + bandID
 
 
 Stages (Strong)
-- stageName, audienceSize
-- PK: stageName
+- stageNum, stageName, audienceSize
+- PK: stageNum
 
 
-BandsOnStage (Weak) (Associative table between Bands and Stages)
-- stageName, bandID, startTime
-- PK: stageName + bandID
-- FK: stageName + bandID
+BandsOnStage (Weak) (Associative entity between Bands and Stages)
+- stageNum, bandID, startTime, endTime, date
+- PK: stageNum + bandID
+- FK: stageNum + bandID
 
 
 JobRole (Strong)
@@ -49,5 +49,22 @@ JobRole (Strong)
 
 
 Shift (Strong):
-- shiftID, slotNumber, startTime, endTime
-- PK: shiftID
+- shiftNum, startTime, endTime
+- PK: shiftNum
+
+
+Attendee (Weak) (1-to-1 between Person and Attendee)
+- pid, seatStatus
+	- seatStatus: Grass, Pit, VIP
+- PK: pid
+- FK: pid
+
+
+EventWorker (Weak) (1-to-1 between Person and EventWorker)
+- pid, salaryUSD
+
+
+Staff (Weak) (Associative entity between Person, JobRole, and Shift)
+- pid, jobID, shiftNum
+- PK: pid + jobID + shiftNum
+- FK: pid + jobID + shiftNum
