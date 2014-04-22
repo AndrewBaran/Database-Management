@@ -10,6 +10,8 @@
 drop view if exists bandInformation;
 drop view if exists salesNumbers;
 drop view if exists completeSchedule;
+drop view if exists employeeSchedule;
+drop view if exists customerData;
 
 -- Drop tables if they already exist in the DBMS
 
@@ -450,19 +452,6 @@ create view bandInformation as
         and person.pid = bandMember.pid;
 
 
--- View that allows management to see the sales numbers in terms of tickets sold, which tickets were sold, and the profit from that sales.
-create view salesNumbers as
-
-    select tickets.ticketName, priceUSD, count as salesNumbers, (tickets.priceUSD * count) as profitUSD
-    from tickets
-        join
-    (select ticketsSold.ticketID, count(ticketsSold.ticketID)
-    from ticketsSold
-    group by ticketsSold.ticketID) ticketSales
-    on tickets.ticketID = ticketSales.ticketID
-    order by profitUSD desc;
-
-
 -- View that gives a complete, accurate, and minimal necessary schedule of all the bands
 create view completeSchedule as 
 
@@ -472,13 +461,66 @@ create view completeSchedule as
         and schedule.stageID = stages.stageID;
 
 
+-- View that shows the full employee schedule
+create view employeeSchedule as
+    select person.firstName, person.lastName, staff.dayWorking, shift.shiftNum, jobRole.name as jobName, shift.startTime, shift.endTime
+    from staff, jobRole, shift, eventWorker, person
+    where staff.jobID = jobRole.jobID
+        and staff.shiftNum = shift.shiftNum
+        and staff.pid = eventWorker.pid
+        and eventWorker.pid = person.pid;
+
+
+-- View all customer information
+create view customerData as
+
+    select person.firstName, person.lastName, attendee.age, tickets.ticketName, tickets.priceUSD
+    from ticketsSold, attendee, person, tickets
+    where ticketsSold.pid = attendee.pid
+        and ticketsSold.ticketID = tickets.ticketID
+        and attendee.pid = person.pid;
+
 -- Triggers
 
 -- Prevent an attendee from being under 18 years old
-
-
 -- Prevent chaning of salary to negative
 
+
+-- Queries and reports
+
+-- Query that allows management to see the sales numbers in terms of tickets sold, which tickets were sold, and the profit from that sales.
+select tickets.ticketName, priceUSD, count as salesNumbers, (tickets.priceUSD * count) as profitUSD
+from tickets
+    join
+(select ticketsSold.ticketID, count(ticketsSold.ticketID)
+from ticketsSold
+group by ticketsSold.ticketID) ticketSales
+on tickets.ticketID = ticketSales.ticketID
+order by profitUSD desc;
+
+
+-- Query that gets the average age of the attendees of the festival
+select round(avg(attendee.age), 2) as averageAge
+from attendee;
+
+
+-- Query that gets the number of attendees from each state
+select zipCode.state, count(zipCode.state) as population
+from person, attendee, zipCode
+where person.pid = attendee.pid
+    and person.zip = zipCode.zip
+group by zipCode.state;
+
+
+-- Query that selects the employee with the highest salary
+select person.firstName, person.lastName, jobRole.name as jobTitle, max(eventWorker.salaryUSD) as salaryUSD
+from eventWorker, person, staff, jobRole
+where eventWorker.pid = person.pid
+    and staff.pid = eventWorker.pid
+    and staff.jobID = jobRole.jobID
+group by person.firstName, person.lastName, jobRole.name
+order by salaryUSD desc
+limit 1;
 
 
 -- Security permissions
@@ -487,10 +529,8 @@ create view completeSchedule as
 drop role if exists attendee;
 create role attendee;
 
-grant select on bands to attendee;
-grant select on stages to attendee;
-grant select on schedule to attendee;
-
+grant select on completeSchedule to attendee;
+grant select on bandInformation to attendee;
 
 -- Ticket Office
 drop role if exists ticketOffice;
