@@ -462,7 +462,7 @@ create view completeSchedule as
 
 -- View that shows the full employee schedule
 create view employeeSchedule as
-	
+
     select person.firstName, person.lastName, staff.dayWorking, shift.shiftNum, jobRole.name as jobName, shift.startTime, shift.endTime
     from staff, jobRole, shift, eventWorker, person
     where staff.jobID = jobRole.jobID
@@ -522,6 +522,14 @@ where eventWorker.pid = person.pid
 group by person.firstName, person.lastName, jobRole.name
 order by salaryUSD desc
 limit 1;
+
+
+-- Query that shows how many hours total each stage is being used
+select stages.name as stageName, sum((extract(minute from endTime - startTime) / 60.0) + extract (hour from endTime - startTime)) as hoursUsed
+from schedule, stages
+where schedule.stageID = stages.stageID
+group by stages.name
+order by hoursUsed desc;
 
 
 -- Security permissions
