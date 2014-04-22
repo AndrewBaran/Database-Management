@@ -309,15 +309,15 @@ insert into person(pid, firstName, lastName, address, zip)
 
 -- Event Worker
 insert into eventWorker(pid, salaryUSD)
-	values('p000001', 2000);
+	values('p000001', 15);
 insert into eventWorker(pid, salaryUSD)
-	values('p000002', 3000);
+	values('p000002', 20);
 insert into eventWorker(pid, salaryUSD)
-	values('p000003', 4000);
+	values('p000003', 25);
 insert into eventWorker(pid, salaryUSD)
-	values('p000004', 5000);
+	values('p000004', 30);
 insert into eventWorker(pid, salaryUSD)
-	values('p000005', 6000);
+	values('p000005', 40);
 
 
 -- Attendee
@@ -530,6 +530,12 @@ from schedule, stages
 where schedule.stageID = stages.stageID
 group by stages.name
 order by hoursUsed desc;
+
+
+-- Query that produces the profit made off ticket sales
+select sum(tickets.priceUSD) as profit
+from ticketsSold, tickets
+where ticketsSold.ticketID = tickets.ticketID;
 
 
 -- Security permissions
