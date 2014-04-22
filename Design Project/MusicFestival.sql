@@ -8,7 +8,6 @@
 
 -- Drop views if they already exist in the DBMS
 drop view if exists bandInformation;
-drop view if exists salesNumbers;
 drop view if exists completeSchedule;
 drop view if exists employeeSchedule;
 drop view if exists customerData;
@@ -463,6 +462,7 @@ create view completeSchedule as
 
 -- View that shows the full employee schedule
 create view employeeSchedule as
+	
     select person.firstName, person.lastName, staff.dayWorking, shift.shiftNum, jobRole.name as jobName, shift.startTime, shift.endTime
     from staff, jobRole, shift, eventWorker, person
     where staff.jobID = jobRole.jobID
@@ -479,6 +479,7 @@ create view customerData as
     where ticketsSold.pid = attendee.pid
         and ticketsSold.ticketID = tickets.ticketID
         and attendee.pid = person.pid;
+
 
 -- Triggers
 
@@ -558,13 +559,13 @@ grant select, insert, update, delete on person to management;
 
 
 -- Security Personel
-drop role if exists security;
-create role security;
+drop role if exists securityOfficial;
+create role securityOfficial;
 
-grant select, remove on person to security;
-grant select, remove on attendee to security;
-grant select on employeeSchedule to security;
-grant select on bandInformation to security;
+grant select, delete on person to securityOfficial;
+grant select, delete on attendee to securityOfficial;
+grant select on employeeSchedule to securityOfficial;
+grant select on bandInformation to securityOfficial;
 
 
 -- Database administrator
