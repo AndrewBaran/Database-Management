@@ -471,7 +471,7 @@ create view employeeSchedule as
         and eventWorker.pid = person.pid;
 
 
--- View all customer information
+-- View that shows all customer information
 create view customerData as
 
     select person.firstName, person.lastName, attendee.age, tickets.ticketName, tickets.priceUSD
@@ -532,6 +532,7 @@ create role attendee;
 grant select on completeSchedule to attendee;
 grant select on bandInformation to attendee;
 
+
 -- Ticket Office
 drop role if exists ticketOffice;
 create role ticketOffice;
@@ -554,6 +555,16 @@ grant select, insert, update, delete on membersInBands to management;
 grant select, insert, update, delete on tickets to management;
 grant select, insert, update, delete on stages to management;
 grant select, insert, update, delete on person to management;
+
+
+-- Security Personel
+drop role if exists security;
+create role security;
+
+grant select, remove on person to security;
+grant select, remove on attendee to security;
+grant select on employeeSchedule to security;
+grant select on bandInformation to security;
 
 
 -- Database administrator
