@@ -308,15 +308,15 @@ insert into person(pid, firstName, lastName, address, zip)
 
 -- Event Worker
 insert into eventWorker(pid, salaryUSD)
-	values('p000001', '2000');
+	values('p000001', 2000);
 insert into eventWorker(pid, salaryUSD)
-	values('p000002', '3000');
+	values('p000002', 3000);
 insert into eventWorker(pid, salaryUSD)
-	values('p000003', '4000');
+	values('p000003', 4000);
 insert into eventWorker(pid, salaryUSD)
-	values('p000004', '5000');
+	values('p000004', 5000);
 insert into eventWorker(pid, salaryUSD)
-	values('p000005', '6000');
+	values('p000005', 6000);
 
 
 -- Attendee
@@ -475,7 +475,10 @@ create view completeSchedule as
 -- Triggers
 
 -- Prevent an attendee from being under 18 years old
+
+
 -- Prevent chaning of salary to negative
+
 
 
 -- Security permissions
