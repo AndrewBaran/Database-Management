@@ -17,4 +17,5 @@ Future Implementations:
 
 Add ticket quantities
 	Check if a ticket is available for a given section
-
+Make the scheduling conflict manager more flexible
+	Cant schedule any time a band has a slot booked
