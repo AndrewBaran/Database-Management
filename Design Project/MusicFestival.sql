@@ -520,7 +520,8 @@ begin
 		delete from schedule
 		where new.stageID = stageID
 			and new.bandID = bandID
-			and new.datePlayed = datePlayed;
+			and new.datePlayed = datePlayed
+			and new.startTime = startTime;
 
 		raise notice 'Conflicting time slot: You cannot enter two bands for the same time';
 		
@@ -541,6 +542,34 @@ create trigger conflictManagement
 after insert on schedule
 for each row
 execute procedure preventConflict();
+
+
+-- Prevent underage attendees (18 years or less)
+create or replace function preventUnderage() returns trigger as
+$$
+begin
+
+	if new.age < 18 then
+		delete from attendee
+		where new.pid = pid;
+
+		raise notice 'Warning: Attendents of the festival must be 18 years or older';
+
+		return null;
+	end if;
+
+	if new.age >= 18 then
+		return new;
+	end if;
+
+end
+$$ language PLPGSQL;
+
+drop trigger if exists ageCheck on attendee;
+create trigger ageCheck
+after insert on attendee
+for each row
+execute procedure preventUnderage();
 
 
 -- Queries and reports
