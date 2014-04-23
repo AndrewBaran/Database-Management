@@ -557,6 +557,15 @@ grant select, insert, update, delete on ticketsSold to ticketOffice;
 grant select, insert, update, delete on attendee to ticketOffice;
 
 
+-- Security Personel
+drop role if exists securityOfficial;
+create role securityOfficial;
+
+grant select, delete on person to securityOfficial;
+grant select, delete on attendee to securityOfficial;
+grant select on employeeSchedule to securityOfficial;
+
+
 -- Management
 drop role if exists management;
 create role management;
@@ -565,21 +574,9 @@ grant select, insert, update, delete on jobRole to management;
 grant select, insert, update, delete on staff to management;
 grant select, insert, update, delete on schedule to management;
 grant select, insert, update, delete on eventWorker to management;
-grant select, insert, update, delete on bands to management;
-grant select, insert, update, delete on membersInBands to management;
 grant select, insert, update, delete on tickets to management;
-grant select, insert, update, delete on stages to management;
-grant select, insert, update, delete on person to management;
-
-
--- Security Personel
-drop role if exists securityOfficial;
-create role securityOfficial;
-
-grant select, delete on person to securityOfficial;
-grant select, delete on attendee to securityOfficial;
-grant select on employeeSchedule to securityOfficial;
-grant select on bandInformation to securityOfficial;
+grant select on employeeSchedule to management;
+grant select on completeSchedule to management;
 
 
 -- Database administrator
