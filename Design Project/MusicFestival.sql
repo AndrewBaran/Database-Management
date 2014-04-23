@@ -513,29 +513,12 @@ where person.pid = attendee.pid
 group by zipCode.state;
 
 
--- Query that selects the employee with the highest salary
-select person.firstName, person.lastName, jobRole.name as jobTitle, max(eventWorker.salaryUSD) as salaryUSD
-from eventWorker, person, staff, jobRole
-where eventWorker.pid = person.pid
-    and staff.pid = eventWorker.pid
-    and staff.jobID = jobRole.jobID
-group by person.firstName, person.lastName, jobRole.name
-order by salaryUSD desc
-limit 1;
-
-
 -- Query that shows how many hours total each stage is being used
 select stages.name as stageName, sum((extract(minute from endTime - startTime) / 60.0) + extract (hour from endTime - startTime)) as hoursUsed
 from schedule, stages
 where schedule.stageID = stages.stageID
 group by stages.name
 order by hoursUsed desc;
-
-
--- Query that produces the profit made off ticket sales
-select sum(tickets.priceUSD) as profit
-from ticketsSold, tickets
-where ticketsSold.ticketID = tickets.ticketID;
 
 
 -- Security permissions
