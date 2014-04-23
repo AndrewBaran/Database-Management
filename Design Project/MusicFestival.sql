@@ -483,8 +483,26 @@ create view customerData as
 
 -- Triggers
 
--- Prevent an attendee from being under 18 years old
 -- Prevent chaning of salary to negative
+create or replace function validateInfo() returns trigger as
+$$
+begin
+	if new.salaryUSD < 0 then
+		update eventWorker
+		set salaryUSD = old.salaryUSD 
+		where pid = new.pid;
+	end if;
+
+	return new;
+end
+$$
+language PLPGSQL;
+
+
+create trigger validateSalary
+after update on eventWorker
+for each row
+execute procedure validateInfo();
 
 
 -- Queries and reports
