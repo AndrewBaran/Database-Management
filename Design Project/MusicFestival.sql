@@ -505,6 +505,44 @@ for each row
 execute procedure validateInfo();
 
 
+-- Prevent two bands from being in the same timeslot
+create or replace function preventConflict() returns trigger as
+$$
+declare
+	conflictNumber integer;
+begin
+	select count(*) into conflictNumber
+	from schedule
+	where datePlayed = new.datePlayed
+		and startTime = new.startTime;
+
+	if conflictNumber > 1 then
+		delete from schedule
+		where new.stageID = stageID
+			and new.bandID = bandID
+			and new.datePlayed = datePlayed;
+
+		raise notice 'Conflicting time slot: You cannot enter two bands for the same time';
+		
+		return null;
+	end if;
+
+	if conflictNumber <= 1 then
+		return new;
+	end if;
+	
+
+end
+$$
+language PLPGSQL;
+
+drop trigger if exists conflictManagement on schedule;
+create trigger conflictManagement
+after insert on schedule
+for each row
+execute procedure preventConflict();
+
+
 -- Queries and reports
 
 -- Query that allows management to see the sales numbers in terms of tickets sold, which tickets were sold, and the profit from that sales.
