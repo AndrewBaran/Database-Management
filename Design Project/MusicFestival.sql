@@ -491,6 +491,8 @@ begin
 		update eventWorker
 		set salaryUSD = old.salaryUSD 
 		where pid = new.pid;
+
+		raise notice 'Warning: Cannot change salary to a negative value';
 	end if;
 
 	return new;
@@ -537,7 +539,7 @@ end
 $$
 language PLPGSQL;
 
-drop trigger if exists conflictManagement on schedule;
+
 create trigger conflictManagement
 after insert on schedule
 for each row
@@ -565,7 +567,7 @@ begin
 end
 $$ language PLPGSQL;
 
-drop trigger if exists ageCheck on attendee;
+
 create trigger ageCheck
 after insert on attendee
 for each row
